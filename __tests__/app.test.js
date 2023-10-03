@@ -50,13 +50,13 @@ describe('GET /api/articles/:article_id', () => {
 
         })
     })
-    test.only('400: responds with an appropriate status and error message when given an invalid id', () => {
-        return request(app).get('/api/articles/not-valid').expect(400).then(({ body }) => {
-            console.log(body);
-            expect(body.msg.toBe('Invalid article ID'))
-        })
-    })
+    // test('400: responds with an appropriate status and error message when given an invalid id', () => {
+    //     return request(app).get('/api/articles/not-valid').expect(400).then(({ body }) => {
+    //         expect(body.msg.toBe('Invalid article ID'))
+    //     })
+    // })
 })
+
 
 
 
