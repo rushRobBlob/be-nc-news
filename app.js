@@ -1,15 +1,22 @@
 const express = require('express');
-const { getAllTopics, getArticlesById } = require('./controllers/app.controllers.js')
-const { handleCustomErr } = require('./controllers/error.controllers.js')
+const { getAllTopics } = require('./controllers/app.controllers.js')
+const endPoints = require('./endpoints.json')
+
 const app = express();
 
 
 //GETS
 app.get('/api/topics', getAllTopics);
-app.get('/api/articles/:article_id', getArticlesById)
+
 
 //ERRORS
-app.use(handleCustomErr);
+
+
+
+
+app.get('/api', (req, res, next) => {
+    res.status(200).send({ endpoints: endPoints });
+})
 
 
 
