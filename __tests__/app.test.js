@@ -19,8 +19,20 @@ describe('general errors', () => {
     })
 })
 
-describe('/api/topics', () => {
-    test('GET:200 responds with an array of topic objects containing the correct properties', () => {
+describe('GET /api', () => {
+    test('responds with an object describing all the available endpoints', () => {
+        return request(app).get('/api').expect(200).then(({ body }) => {
+            const endPoints = body.endpoints;
+            for (const key in endPoints) {
+                expect(endPoints[key].hasOwnProperty('description')).toBe(true);
+            }
+            expect(typeof endPoints).toBe('object');
+        })
+    })
+})
+
+describe('GET /api/topics', () => {
+    test('responds with an array of topic objects containing the correct properties', () => {
         return request(app).get('/api/topics').expect(200).then(({ body: topics }) => {
 
             expect(topics.length).toBe(3);
