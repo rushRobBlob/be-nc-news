@@ -12,6 +12,6 @@ exports.retrieveArticlesById = (articleId) => {
         if (!article.length) {
             return Promise.reject({ status: 404, msg: 'Article does not exist!' })
         };
-        return article;
+        return article[0];
     })
 }

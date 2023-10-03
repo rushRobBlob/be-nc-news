@@ -12,7 +12,7 @@ exports.getArticlesById = (req, res, next) => {
     const { article_id: id } = req.params;
 
     retrieveArticlesById(id).then((article) => {
-        res.status(200).send({ articles: article })
+        res.status(200).send({ article })
     })
         .catch((err) => {
             next(err)

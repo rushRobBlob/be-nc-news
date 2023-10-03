@@ -3,6 +3,7 @@ const request = require('supertest');
 const seed = require('../db/seeds/seed.js')
 const data = require('../db/data/test-data/index.js')
 const db = require('../db/connection.js')
+const endpointsJSON = require('../endpoints.json')
 
 beforeEach(() => {
     return seed(data);
@@ -38,24 +39,28 @@ describe('/api/topics', () => {
 describe('GET /api', () => {
     test('responds with an object describing all the available endpoints', () => {
         return request(app).get('/api').expect(200).then(({ body }) => {
-            const endPoints = body.endpoints;
-            for (const key in endPoints) {
-                expect(endPoints[key].hasOwnProperty('description')).toBe(true);
-            }
-            expect(typeof endPoints).toBe('object');
+            expect(body.endpoints).toEqual(endpointsJSON);
         })
     })
 })
 
-describe('GET /api/articles/:article_id', () => {
+describe.only('GET /api/articles/:article_id', () => {
     test('200: responds with an article object with the correct properties when given a valid id that exists', () => {
         return request(app).get('/api/articles/4').expect(200).then(({ body }) => {
-            const { articles: article } = body;
-            const articleProperties = ['author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'article_img_url']
-            articleProperties.forEach((articleProperty) => {
-                expect(article[0].hasOwnProperty(articleProperty));
-            })
-
+            const testArticle = {
+                article_id: 4,
+                topic: 'mitch',
+                votes: 0
+            }
+            expect(body.article).toMatchObject(testArticle);
+            expect(typeof body.article.article_id).toBe('number')
+            expect(typeof body.article.title).toBe('string')
+            expect(typeof body.article.topic).toBe('string')
+            expect(typeof body.article.author).toBe('string')
+            expect(typeof body.article.body).toBe('string')
+            expect(typeof body.article.created_at).toBe('string')
+            expect(typeof body.article.votes).toBe('number')
+            expect(typeof body.article.article_img_url).toBe('string')
         })
     })
     test('404: responds with an appropriate status and error message when given a valid id that does not exist', () => {
