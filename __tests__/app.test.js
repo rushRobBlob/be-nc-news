@@ -44,7 +44,7 @@ describe('GET /api', () => {
     })
 })
 
-describe.only('GET /api/articles/:article_id', () => {
+describe('GET /api/articles/:article_id', () => {
     test('200: responds with an article object with the correct properties when given a valid id that exists', () => {
         return request(app).get('/api/articles/4').expect(200).then(({ body }) => {
             const testArticle = {
