@@ -1,4 +1,4 @@
-const { retrieveAllTopics, retrieveArticlesById } = require('../models/app.models.js')
+const { retrieveAllTopics, retrieveArticlesById, retrieveAllArticles } = require('../models/app.models.js')
 
 exports.getAllTopics = (req, res, next) => {
     retrieveAllTopics().then((topics) => {
@@ -17,4 +17,11 @@ exports.getArticlesById = (req, res, next) => {
         .catch((err) => {
             next(err)
         });
+}
+
+exports.getAllArticles = (req, res, next) => {
+
+    retrieveAllArticles().then((articles) => {
+        res.status(200).send({ articles });
+    });
 }
