@@ -72,3 +72,12 @@ describe('GET /api/articles/:article_id', () => {
         })
     })
 })
+
+
+// describe('GET /api/articles/:article_id/comments', () => {
+//     test('200: responds with an array of comments from the corresponding article_id, with each comment containing the correct properties', () => {
+//         return request(app).get('/api/articles/5/comments').expect(200).then(({ body }) => {
+//             expect(body.comments).toHaveLength(2);
+//         })
+//     })
+// })

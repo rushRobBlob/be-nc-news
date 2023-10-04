@@ -1,4 +1,4 @@
-const { retrieveAllTopics, retrieveArticlesById } = require('../models/app.models.js')
+const { retrieveAllTopics, retrieveArticlesById, retrieveCommentsByArticleId } = require('../models/app.models.js')
 
 exports.getAllTopics = (req, res, next) => {
     retrieveAllTopics().then((topics) => {
@@ -17,4 +17,10 @@ exports.getArticlesById = (req, res, next) => {
         .catch((err) => {
             next(err)
         });
+}
+
+exports.getCommentsByArticleId = (req, res, next) => {
+    const { article_id: id } = req.params;
+
+    retrieveCommentsByArticleId(id);
 }

@@ -15,3 +15,7 @@ exports.retrieveArticlesById = (articleId) => {
         return article[0];
     })
 }
+
+exports.retrieveCommentsByArticleId = (articleId) => {
+    ;
+}
