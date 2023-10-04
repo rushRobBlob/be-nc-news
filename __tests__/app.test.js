@@ -90,6 +90,7 @@ describe('GET /api/articles', () => {
             expect(body.articles).toHaveLength(13);
             body.articles.forEach((article) => {
                 expect(article).toMatchObject(testArticle);
+                expect(article.hasOwnProperty('body')).toBe(false);
             })
         })
     })
