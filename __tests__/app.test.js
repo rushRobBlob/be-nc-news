@@ -96,9 +96,14 @@ describe('GET /api/articles/:article_id/comments', () => {
             expect(body.comments).toBeSortedBy('created_at', { descending: true });
         })
     })
+    test('200: should respond with an empty array when the id is valid but there are no comments', () => {
+        return request(app).get('/api/articles/4/comments').expect(200).then(({ body }) => {
+            expect(body.comments).toEqual([]);
+        })
+    })
     test('404: responds with an appropriate status and error message when given a valid id that does not exist', () => {
         return request(app).get('/api/articles/9999/comments').expect(404).then(({ body }) => {
-            expect(body.msg).toBe('Comment does not exist!');
+            expect(body.msg).toBe('Article does not exist!');
 
         })
     })

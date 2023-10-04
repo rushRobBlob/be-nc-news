@@ -22,10 +22,13 @@ exports.getArticlesById = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
     const { article_id: id } = req.params;
 
-    retrieveCommentsByArticleId(id).then((comments) => {
-        res.status(200).send({ comments });
-    })
+    Promise.all([retrieveCommentsByArticleId(id), retrieveArticlesById(id)])
+
+        .then(([comments]) => {
+            res.status(200).send({ comments });
+        })
         .catch((err) => {
             next(err);
         });
+
 }

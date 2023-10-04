@@ -18,10 +18,10 @@ exports.retrieveArticlesById = (articleId) => {
 
 exports.retrieveCommentsByArticleId = (articleId) => {
     const query = 'SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC';
+
     return db.query(query, [articleId]).then(({ rows: comments }) => {
-        if (!comments.length) {
-            return Promise.reject({ status: 404, msg: 'Comment does not exist!' })
-        };
+
+
         return comments;
     })
 }
