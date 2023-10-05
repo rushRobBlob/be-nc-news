@@ -1,4 +1,4 @@
-const { retrieveArticlesById, retrieveAllArticles, insertComment, retrieveCommentsByArticleId } = require('../models/articles.models.js')
+const { retrieveArticlesById, retrieveAllArticles, insertComment, retrieveCommentsByArticleId, updateArticleVotes } = require('../models/articles.models.js')
 
 
 
@@ -43,6 +43,22 @@ exports.postComment = (req, res, next) => {
         res.status(201).send({ comment });
     })
         .catch((err) => {
+            next(err);
+        });
+}
+
+exports.patchArticleVotes = (req, res, next) => {
+    const votes = req.body.inc_votes;
+    const { article_id: id } = req.params;
+    if (!votes) {
+        return res.status(400).send({ msg: 'Invalid input' })
+    }
+
+    updateArticleVotes(votes, id).then((article) => {
+        res.status(200).send(article);
+    })
+        .catch((err) => {
+
             next(err);
         });
 }

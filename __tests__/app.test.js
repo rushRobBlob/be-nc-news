@@ -192,3 +192,73 @@ describe('POST /api/articles/:article_id/comments', () => {
         })
     })
 })
+
+describe('PATCH /api/articles/:article_id', () => {
+    test('200: responds with the updated article showing correct amount of votes', () => {
+        const newVote = {
+            inc_votes: 4
+        }
+        const updatedArticle = {
+            article_id: 3,
+            votes: 4
+        }
+        return request(app).patch('/api/articles/3').send(newVote).expect(200).then(({ body }) => {
+
+            expect(body).toMatchObject(updatedArticle);
+        })
+
+    })
+    test('200: responds with the updated vote count decremented when passed negative integer', () => {
+        const newVote = {
+            inc_votes: -10
+        }
+        const updatedArticle = {
+            article_id: 1,
+            votes: 90
+        }
+        return request(app).patch('/api/articles/1').send(newVote).expect(200).then(({ body }) => {
+
+            expect(body).toMatchObject(updatedArticle);
+        })
+    })
+    test('200: responds with the updated article and ignores any unnecessary properties', () => {
+        const newVote = {
+            inc_votes: 4,
+            ignoreMe: 'heyyyyyyyyyyyy'
+        }
+        const updatedArticle = {
+            article_id: 3,
+            votes: 4
+        }
+        return request(app).patch('/api/articles/3').send(newVote).expect(200).then(({ body }) => {
+            expect(body).toMatchObject(updatedArticle);
+        })
+    })
+    test('404: responds with an error message when passed a valid article_id that does not exist', () => {
+        const newVote = {
+            inc_votes: 4
+        }
+        return request(app).patch('/api/articles/9999').send(newVote).expect(404).then(({ body }) => {
+
+            expect(body.msg).toBe('No articles found with this ID!');
+        })
+    })
+    test('400: responds with an error message when article_id is invalid', () => {
+        const newVote = {
+            inc_votes: 4
+        }
+        return request(app).patch('/api/articles/not-valid').send(newVote).expect(400).then(({ body }) => {
+
+            expect(body.msg).toBe('Invalid article ID');
+        })
+    })
+    test('400: responds with an error message when request body is missing required field', () => {
+        const newVote = {
+            not_valid_field: 4
+        }
+        return request(app).patch('/api/articles/3').send(newVote).expect(400).then(({ body }) => {
+
+            expect(body.msg).toBe('Invalid input');
+        })
+    })
+})
