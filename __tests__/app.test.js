@@ -208,6 +208,19 @@ describe('PATCH /api/articles/:article_id', () => {
         })
 
     })
+    test('200: responds with the updated vote count decremented when passed negative integer', () => {
+        const newVote = {
+            inc_votes: -10
+        }
+        const updatedArticle = {
+            article_id: 1,
+            votes: 90
+        }
+        return request(app).patch('/api/articles/1').send(newVote).expect(200).then(({ body }) => {
+
+            expect(body).toMatchObject(updatedArticle);
+        })
+    })
     test('200: responds with the updated article and ignores any unnecessary properties', () => {
         const newVote = {
             inc_votes: 4,
@@ -245,7 +258,7 @@ describe('PATCH /api/articles/:article_id', () => {
         }
         return request(app).patch('/api/articles/3').send(newVote).expect(400).then(({ body }) => {
 
-            expect(body.msg).toBe('Missing field');
+            expect(body.msg).toBe('Invalid input');
         })
     })
 })

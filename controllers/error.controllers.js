@@ -17,6 +17,8 @@ exports.handlePSQLErrors = (err, req, res, next) => {
         }
     } else if (err.code === '23502') {
         res.status(400).send({ msg: 'Missing field' });
+    } else if (err.code === '42601') {
+        res.status(400).send({ msg: 'Invalid input' })
     } else {
         next(err);
     }

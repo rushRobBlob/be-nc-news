@@ -51,8 +51,10 @@ exports.insertComment = (commentToInsert, articleId) => {
 }
 
 exports.updateArticleVotes = (votes, id) => {
-    const query = `UPDATE articles SET votes = votes + $1
+    const query = `UPDATE articles 
+    SET votes = votes + $1 
     WHERE article_id = $2 RETURNING *;`
+
     const values = [votes, id]
     return db.query(query, values).then(({ rows }) => {
 
