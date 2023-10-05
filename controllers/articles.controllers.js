@@ -1,12 +1,6 @@
-const { retrieveAllTopics, retrieveArticlesById, retrieveAllArticles } = require('../models/app.models.js')
+const { retrieveArticlesById, retrieveAllArticles, insertComment } = require('../models/articles.models.js')
 
-exports.getAllTopics = (req, res, next) => {
-    retrieveAllTopics().then((topics) => {
-        res.status(200).send(topics);
-    })
-        .catch(next);
 
-}
 
 exports.getArticlesById = (req, res, next) => {
     const { article_id: id } = req.params;
@@ -24,4 +18,12 @@ exports.getAllArticles = (req, res, next) => {
     retrieveAllArticles().then((articles) => {
         res.status(200).send({ articles });
     });
+}
+
+exports.postComment = (req, res, next) => {
+    const comment = req.body;
+    const { article_id } = req.params;
+
+
+    insertComment(comment, article_id);
 }

@@ -95,3 +95,15 @@ describe('GET /api/articles', () => {
         })
     })
 })
+
+// describe('POST /api/articles/:article_id/comments', () => {
+//     test('201: responds with the posted comment when username is valid', () => {
+//         const newComment = {
+//             username: 'rogersop',
+//             comment: 'I really really really like dogs'
+//         }
+//         return request(app).post('/api/articles/9/comments').send(newComment).expect(201).then(({ body }) => {
+//             expect(body.comment).toBe('I really really really like dogs');
+//         })
+//     })
+// })
