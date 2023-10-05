@@ -34,7 +34,7 @@ exports.insertComment = (commentToInsert, articleId) => {
     RETURNING *                
     ;`, [comment, username, articleId])
         .then((result) => {
-            console.log(result.rows[0].body);
+            return result.rows[0].body;
         })
 
 

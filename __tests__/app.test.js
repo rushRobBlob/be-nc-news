@@ -96,14 +96,41 @@ describe('GET /api/articles', () => {
     })
 })
 
-// describe('POST /api/articles/:article_id/comments', () => {
-//     test('201: responds with the posted comment when username is valid', () => {
-//         const newComment = {
-//             username: 'rogersop',
-//             comment: 'I really really really like dogs'
-//         }
-//         return request(app).post('/api/articles/9/comments').send(newComment).expect(201).then(({ body }) => {
-//             expect(body.comment).toBe('I really really really like dogs');
-//         })
-//     })
-// })
+describe('POST /api/articles/:article_id/comments', () => {
+    test('201: responds with the posted comment when username and article_id are valid', () => {
+        const newComment = {
+            username: 'rogersop',
+            comment: 'I really really really like dogs'
+        }
+        return request(app).post('/api/articles/9/comments').send(newComment).expect(201).then(({ body }) => {
+            expect(body.comment).toBe('I really really really like dogs');
+        })
+    })
+    test('401: responds with an error message when username is invalid', () => {
+        const newComment = {
+            username: 'johnmatrix',
+            comment: 'let off some steam, bennett!'
+        }
+        return request(app).post('/api/articles/9/comments').send(newComment).expect(401).then(({ body }) => {
+            expect(body.msg).toBe('Invalid username');
+        })
+    })
+    test('404: responds with an appropriate error message when article_id and username are valid but article does not exist', () => {
+        const newComment = {
+            username: 'rogersop',
+            comment: 'I really really really like errors'
+        }
+        return request(app).post('/api/articles/9999/comments').send(newComment).expect(404).then(({ body }) => {
+            expect(body.msg).toBe('Article not found');
+        })
+    })
+    test('400: responds with an error message when article_id in invalid', () => {
+        const newComment = {
+            username: 'rogersop',
+            comment: 'I really really really like errors'
+        }
+        return request(app).post('/api/articles/not-valid/comments').send(newComment).expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Invalid article ID');
+        })
+    })
+})
