@@ -12,6 +12,17 @@ exports.retrieveArticlesById = (articleId) => {
     })
 }
 
+
+exports.retrieveCommentsByArticleId = (articleId) => {
+    const query = 'SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC';
+
+    return db.query(query, [articleId]).then(({ rows: comments }) => {
+
+
+        return comments;
+    })
+}  
+
 exports.retrieveAllArticles = () => {
     const query = `
     SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comment_id) AS comment_count
@@ -22,6 +33,7 @@ exports.retrieveAllArticles = () => {
     `;
     return db.query(query).then(({ rows }) => {
         return rows;
+
     })
 }
 

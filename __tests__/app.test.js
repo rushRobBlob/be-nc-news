@@ -74,6 +74,46 @@ describe('GET /api/articles/:article_id', () => {
 })
 
 
+describe('GET /api/articles/:article_id/comments', () => {
+    test('200: responds with an array of comments from the corresponding article_id, with each comment containing the correct properties', () => {
+        return request(app).get('/api/articles/5/comments').expect(200).then(({ body }) => {
+            expect(body.comments).toHaveLength(2);
+            const testComment = {
+                comment_id: expect.any(Number),
+                body: expect.any(String),
+                article_id: expect.any(Number),
+                author: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+            }
+            body.comments.forEach((comment) => {
+                expect(comment).toMatchObject(testComment);
+            })
+        })
+    })
+    test('200: should respond with the most recent comment first', () => {
+        return request(app).get('/api/articles/5/comments').expect(200).then(({ body }) => {
+            expect(body.comments).toBeSortedBy('created_at', { descending: true });
+        })
+    })
+    test('200: should respond with an empty array when the id is valid but there are no comments', () => {
+        return request(app).get('/api/articles/4/comments').expect(200).then(({ body }) => {
+            expect(body.comments).toEqual([]);
+        })
+    })
+    test('404: responds with an appropriate status and error message when given a valid id that does not exist', () => {
+        return request(app).get('/api/articles/9999/comments').expect(404).then(({ body }) => {
+            expect(body.msg).toBe('Article does not exist!');
+
+        })
+    })
+    test('400: responds with an appropriate status and error message when given an invalid id', () => {
+        return request(app).get('/api/articles/not-valid/comments').expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Invalid article ID');
+        })
+    })
+})
+
 describe('GET /api/articles', () => {
     test('responds with an array of article objects, each with the correct properties', () => {
         return request(app).get('/api/articles').expect(200).then(({ body }) => {

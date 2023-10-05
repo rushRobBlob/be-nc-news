@@ -1,4 +1,4 @@
-const { retrieveArticlesById, retrieveAllArticles, insertComment } = require('../models/articles.models.js')
+const { retrieveArticlesById, retrieveAllArticles, insertComment, retrieveCommentsByArticleId } = require('../models/articles.models.js')
 
 
 
@@ -11,6 +11,21 @@ exports.getArticlesById = (req, res, next) => {
         .catch((err) => {
             next(err)
         });
+}
+
+
+exports.getCommentsByArticleId = (req, res, next) => {
+    const { article_id: id } = req.params;
+
+    Promise.all([retrieveCommentsByArticleId(id), retrieveArticlesById(id)])
+
+        .then(([comments]) => {
+            res.status(200).send({ comments });
+        })
+        .catch((err) => {
+            next(err);
+        });
+
 }
 
 exports.getAllArticles = (req, res, next) => {
