@@ -262,3 +262,14 @@ describe('PATCH /api/articles/:article_id', () => {
         })
     })
 })
+
+describe('DELETE /api/comments/:comment_id', () => {
+    test('204: deletes a comment with the corresponding comment_id and sends nothing back', () => {
+        return request(app).delete('/api/comments/7').expect(204);
+    })
+    test('404: responds with error message when there is no comment found', () => {
+        return request(app).delete('/api/comments/9999').expect(404).then(({ body }) => {
+            expect(body.msg).toBe('No comments found');
+        })
+    })
+})
