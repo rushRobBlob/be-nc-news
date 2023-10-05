@@ -1,10 +1,6 @@
 const db = require('../db/connection.js')
 
-exports.retrieveAllTopics = () => {
-    return db.query('SELECT * FROM topics;').then(({ rows: topics }) => {
-        return topics;
-    });
-}
+
 
 exports.retrieveArticlesById = (articleId) => {
     const query = 'SELECT * FROM articles WHERE article_id = $1';
@@ -39,4 +35,22 @@ exports.retrieveAllArticles = () => {
         return rows;
 
     })
+}
+
+exports.insertComment = (commentToInsert, articleId) => {
+    const { username, comment } = commentToInsert;
+    return db.query(`
+    INSERT INTO comments
+    (body, author, article_id)
+    VALUES ($1, $2, $3)
+    RETURNING *                
+    ;`, [comment, username, articleId])
+        .then((result) => {
+            return result.rows[0].body;
+        })
+
+
+
+
+
 }
