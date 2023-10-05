@@ -146,6 +146,16 @@ describe('POST /api/articles/:article_id/comments', () => {
             expect(body.comment).toBe('I really really really like dogs');
         })
     })
+    test('201: responds with the posted comment when username and article_id are valid and ignores any unnecessary properties', () => {
+        const newComment = {
+            username: 'rogersop',
+            comment: 'I really really really like dogs',
+            ignoreMe: 'heyyyyyyyyyyyy'
+        }
+        return request(app).post('/api/articles/9/comments').send(newComment).expect(201).then(({ body }) => {
+            expect(body.comment).toBe('I really really really like dogs');
+        })
+    })
     test('401: responds with an error message when username is invalid', () => {
         const newComment = {
             username: 'johnmatrix',
@@ -171,6 +181,14 @@ describe('POST /api/articles/:article_id/comments', () => {
         }
         return request(app).post('/api/articles/not-valid/comments').send(newComment).expect(400).then(({ body }) => {
             expect(body.msg).toBe('Invalid article ID');
+        })
+    })
+    test('400: responds with an error message when a valid property is missing from the comment body', () => {
+        const newComment = {
+            comment: 'I really really really like errors'
+        }
+        return request(app).post('/api/articles/9/comments').send(newComment).expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Missing field');
         })
     })
 })
