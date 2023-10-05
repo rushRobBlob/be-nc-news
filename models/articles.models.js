@@ -21,7 +21,7 @@ exports.retrieveCommentsByArticleId = (articleId) => {
 
         return comments;
     })
-}  
+}
 
 exports.retrieveAllArticles = () => {
     const query = `
@@ -48,9 +48,22 @@ exports.insertComment = (commentToInsert, articleId) => {
         .then((result) => {
             return result.rows[0].body;
         })
-
-
-
-
-
 }
+
+exports.updateArticleVotes = (votes, id) => {
+    const query = `UPDATE articles SET votes = votes + $1
+    WHERE article_id = $2 RETURNING *;`
+    const values = [votes, id]
+    return db.query(query, values).then(({ rows }) => {
+
+        if (!rows.length) {
+            return Promise.reject({ status: 404, msg: 'No articles found with this ID!' })
+        }
+
+        return rows[0];
+    })
+}
+
+
+
+
