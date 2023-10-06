@@ -295,3 +295,26 @@ describe('GET /api/users', () => {
         })
     })
 })
+
+describe('GET /api/articles (topic query)', () => {
+    test('200: responds with an array of articles that are related to the queried topic', () => {
+        return request(app).get('/api/articles?topic=cats').expect(200).then(({ body }) => {
+            expect(body.articles).toHaveLength(1);
+        })
+    })
+    test('200: responds with an array of all articles if query is omitted', () => {
+        return request(app).get('/api/articles').expect(200).then(({ body }) => {
+            expect(body.articles).toHaveLength(13);
+        })
+    })
+    test('200: responds with an empty array when there are no articles found with the associated topic', () => {
+        return request(app).get('/api/articles?topic=paper').expect(200).then(({ body }) => {
+            expect(body.articles).toEqual([]);
+        })
+    })
+    test('400: responds with an error message when passed topic is invalid', () => {
+        return request(app).get('/api/articles?topic=notvalid').expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Invalid topic!');
+        })
+    })
+})

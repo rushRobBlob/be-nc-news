@@ -1,4 +1,5 @@
 const { retrieveArticlesById, retrieveAllArticles, insertComment, retrieveCommentsByArticleId, updateArticleVotes } = require('../models/articles.models.js')
+const { retrieveAllTopics } = require('../models/topics.models.js')
 
 
 
@@ -23,17 +24,38 @@ exports.getCommentsByArticleId = (req, res, next) => {
             res.status(200).send({ comments });
         })
         .catch((err) => {
+
             next(err);
         });
 
 }
 
 exports.getAllArticles = (req, res, next) => {
-
-    retrieveAllArticles().then((articles) => {
-        res.status(200).send({ articles });
-    });
+    const { topic } = req.query
+    const promises = [];
+    if (topic) {
+        promises.push(retrieveAllArticles(topic));
+        promises.push(retrieveAllTopics(topic));
+    } else {
+        promises.push(retrieveAllArticles());
+    }
+    Promise.all(promises)
+        .then(([articles]) => {
+            res.status(200).send({ articles });
+        })
+        .catch((err) => {
+            next(err);
+        });
 }
+
+
+
+
+
+
+
+
+
 
 exports.postComment = (req, res, next) => {
     const comment = req.body;
