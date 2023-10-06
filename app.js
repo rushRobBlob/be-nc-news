@@ -5,6 +5,7 @@ const { handleCustomErr, handle500Errors, handlePSQLErrors } = require('./contro
 const app = express();
 const endPoints = require('./endpoints.json')
 const { deleteCommentById } = require('./controllers/comments.controllers.js')
+const { getAllUsers } = require('./controllers/users.controllers.js')
 
 app.use(express.json())
 
@@ -25,6 +26,9 @@ app.delete('/api/comments/:comment_id', deleteCommentById)
 
 //TOPICS
 app.get('/api/topics', getAllTopics);
+
+//USERS
+app.get('/api/users', getAllUsers);
 
 
 //ERRORS

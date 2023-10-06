@@ -263,6 +263,7 @@ describe('PATCH /api/articles/:article_id', () => {
     })
 })
 
+
 describe('DELETE /api/comments/:comment_id', () => {
     test('204: deletes a comment with the corresponding comment_id and sends nothing back', () => {
         return request(app).delete('/api/comments/7').expect(204);
@@ -275,6 +276,22 @@ describe('DELETE /api/comments/:comment_id', () => {
     test('400: responds with error message when comment_id is invalid', () => {
         return request(app).delete('/api/comments/not-valid').expect(400).then(({ body }) => {
             expect(body.msg).toBe('Invalid ID')
+        })
+    })
+})
+
+describe('GET /api/users', () => {
+    test('200: responds with an array of user objects, each with the correct properties', () => {
+        const testUser = {
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String)
+        }
+        return request(app).get('/api/users').expect(200).then(({ body }) => {
+            expect(body.users).toHaveLength(4);
+            body.users.forEach((user) => {
+                expect(user).toMatchObject(testUser);
+            })
         })
     })
 })
