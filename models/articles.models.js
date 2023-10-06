@@ -3,7 +3,11 @@ const db = require('../db/connection.js')
 
 
 exports.retrieveArticlesById = (articleId) => {
-    const query = 'SELECT * FROM articles WHERE article_id = $1';
+    const query = `SELECT articles.author, articles.title, articles.body, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comment_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id 
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id`;
     return db.query(query, [articleId]).then(({ rows: article }) => {
         if (!article.length) {
             return Promise.reject({ status: 404, msg: 'Article does not exist!' })

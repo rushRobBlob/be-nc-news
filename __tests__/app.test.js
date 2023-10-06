@@ -318,3 +318,22 @@ describe('GET /api/articles (topic query)', () => {
         })
     })
 })
+
+describe('GET /api/articles/:article_id', () => {
+    test('FEATURE REQUEST: responds with an article object with a new column called comment_count', () => {
+        const testArticle = {
+            author: expect.any(String),
+            title: expect.any(String),
+            body: expect.any(String),
+            article_id: 1,
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: '11'
+        }
+        return request(app).get('/api/articles/1').then(({ body }) => {
+            expect(body.article).toMatchObject(testArticle);
+        })
+    })
+})
