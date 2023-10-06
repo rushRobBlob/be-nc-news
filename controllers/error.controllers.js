@@ -8,7 +8,8 @@ exports.handleCustomErr = (err, req, res, next) => {
 
 exports.handlePSQLErrors = (err, req, res, next) => {
     if (err.code === '22P02') {
-        res.status(400).send({ msg: 'Invalid article ID' })
+
+        res.status(400).send({ msg: 'Invalid ID' })
     } else if (err.code === '23503') {
         if (err.constraint === 'comments_author_fkey') {
             res.status(401).send({ msg: 'Invalid username' })

@@ -4,6 +4,7 @@ const { getArticlesById, getAllArticles, getCommentsByArticleId, postComment, pa
 const { handleCustomErr, handle500Errors, handlePSQLErrors } = require('./controllers/error.controllers.js')
 const app = express();
 const endPoints = require('./endpoints.json')
+const { deleteCommentById } = require('./controllers/comments.controllers.js')
 
 app.use(express.json())
 
@@ -18,6 +19,9 @@ app.get('/api/articles/:article_id', getArticlesById);
 app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 app.get('/api/articles', getAllArticles);
 app.patch('/api/articles/:article_id', patchArticleVotes);
+
+//COMMENTS
+app.delete('/api/comments/:comment_id', deleteCommentById)
 
 //TOPICS
 app.get('/api/topics', getAllTopics);

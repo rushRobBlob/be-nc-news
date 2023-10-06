@@ -68,7 +68,7 @@ describe('GET /api/articles/:article_id', () => {
     })
     test('400: responds with an appropriate status and error message when given an invalid id', () => {
         return request(app).get('/api/articles/not-valid').expect(400).then(({ body }) => {
-            expect(body.msg).toBe('Invalid article ID');
+            expect(body.msg).toBe('Invalid ID');
         })
     })
 })
@@ -109,7 +109,7 @@ describe('GET /api/articles/:article_id/comments', () => {
     })
     test('400: responds with an appropriate status and error message when given an invalid id', () => {
         return request(app).get('/api/articles/not-valid/comments').expect(400).then(({ body }) => {
-            expect(body.msg).toBe('Invalid article ID');
+            expect(body.msg).toBe('Invalid ID');
         })
     })
 })
@@ -180,7 +180,7 @@ describe('POST /api/articles/:article_id/comments', () => {
             comment: 'I really really really like errors'
         }
         return request(app).post('/api/articles/not-valid/comments').send(newComment).expect(400).then(({ body }) => {
-            expect(body.msg).toBe('Invalid article ID');
+            expect(body.msg).toBe('Invalid ID');
         })
     })
     test('400: responds with an error message when a valid property is missing from the comment body', () => {
@@ -249,7 +249,7 @@ describe('PATCH /api/articles/:article_id', () => {
         }
         return request(app).patch('/api/articles/not-valid').send(newVote).expect(400).then(({ body }) => {
 
-            expect(body.msg).toBe('Invalid article ID');
+            expect(body.msg).toBe('Invalid ID');
         })
     })
     test('400: responds with an error message when request body is missing required field', () => {
@@ -259,6 +259,22 @@ describe('PATCH /api/articles/:article_id', () => {
         return request(app).patch('/api/articles/3').send(newVote).expect(400).then(({ body }) => {
 
             expect(body.msg).toBe('Invalid input');
+        })
+    })
+})
+
+describe('DELETE /api/comments/:comment_id', () => {
+    test('204: deletes a comment with the corresponding comment_id and sends nothing back', () => {
+        return request(app).delete('/api/comments/7').expect(204);
+    })
+    test('404: responds with error message when there is no comment found', () => {
+        return request(app).delete('/api/comments/9999').expect(404).then(({ body }) => {
+            expect(body.msg).toBe('No comments found');
+        })
+    })
+    test('400: responds with error message when comment_id is invalid', () => {
+        return request(app).delete('/api/comments/not-valid').expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Invalid ID')
         })
     })
 })
