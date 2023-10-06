@@ -6,7 +6,7 @@ exports.deleteCommentById = (req, res, next) => {
     removeCommentById(id).then(() => {
         res.status(204).send();
     }).catch((err) => {
-        if (err.code === '22P02') { return res.status(400).send({ msg: 'Invalid comment ID' }) }
+
         next(err);
     });
 }
