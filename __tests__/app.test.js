@@ -272,4 +272,9 @@ describe('DELETE /api/comments/:comment_id', () => {
             expect(body.msg).toBe('No comments found');
         })
     })
+    test('400: responds with error message when comment_id is invalid', () => {
+        return request(app).delete('/api/comments/not-valid').expect(400).then(({ body }) => {
+            expect(body.msg).toBe('Invalid comment ID')
+        })
+    })
 })
