@@ -1,4 +1,5 @@
 const { retrieveArticlesById, retrieveAllArticles, insertComment, retrieveCommentsByArticleId, updateArticleVotes } = require('../models/articles.models.js')
+const { retrieveAllTopics } = require('../models/topics.models.js')
 
 
 
@@ -23,16 +24,41 @@ exports.getCommentsByArticleId = (req, res, next) => {
             res.status(200).send({ comments });
         })
         .catch((err) => {
+
             next(err);
         });
 
 }
 
 exports.getAllArticles = (req, res, next) => {
+    const { topic } = req.query
 
-    retrieveAllArticles().then((articles) => {
-        res.status(200).send({ articles });
-    });
+    if (topic) {
+        Promise.all([retrieveAllArticles(topic), retrieveAllTopics(topic)])
+            .then(([articles, topic]) => {
+
+                if (!topic.length && !articles.length) {
+                    res.status(400).send({ msg: 'Invalid topic!' })
+                } else if (!articles.length && topic.length) {
+                    res.status(404).send({ msg: 'No articles found with that topic' })
+                } else {
+                    res.status(200).send({ articles });
+
+                }
+            })
+            .catch((err) => {
+
+                next(err);
+            });
+    } else {
+        retrieveAllArticles().then((articles) => {
+            res.status(200).send({ articles });
+        })
+            .catch((err) => {
+                next(err)
+            })
+    }
+
 }
 
 exports.postComment = (req, res, next) => {

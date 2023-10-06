@@ -23,19 +23,31 @@ exports.retrieveCommentsByArticleId = (articleId) => {
     })
 }
 
-exports.retrieveAllArticles = () => {
-    const query = `
+exports.retrieveAllArticles = (topic) => {
+
+    const values = [];
+    let query = `
     SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comment_id) AS comment_count
-    FROM articles
-    LEFT JOIN comments ON comments.article_id = articles.article_id
-    GROUP BY articles.article_id
+    FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id `
+
+    if (topic) {
+        query += `WHERE topic = $${values.length + 1} `;
+        values.push(topic);
+    }
+    query += `GROUP BY articles.article_id
     ORDER BY articles.created_at DESC;
     `;
-    return db.query(query).then(({ rows }) => {
-        return rows;
 
+
+
+    return db.query(query, values).then(({ rows }) => {
+        return rows;
     })
 }
+
+
+
+
 
 exports.insertComment = (commentToInsert, articleId) => {
     const { username, comment } = commentToInsert;
