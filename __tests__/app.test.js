@@ -307,9 +307,9 @@ describe('GET /api/articles (topic query)', () => {
             expect(body.articles).toHaveLength(13);
         })
     })
-    test('404: responds with an error message when there are no articles found with the associated topic', () => {
-        return request(app).get('/api/articles?topic=paper').expect(404).then(({ body }) => {
-            expect(body.msg).toBe('No articles found with that topic');
+    test('200: responds with an empty array when there are no articles found with the associated topic', () => {
+        return request(app).get('/api/articles?topic=paper').expect(200).then(({ body }) => {
+            expect(body.articles).toEqual([]);
         })
     })
     test('400: responds with an error message when passed topic is invalid', () => {

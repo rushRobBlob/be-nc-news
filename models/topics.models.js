@@ -7,11 +7,17 @@ exports.retrieveAllTopics = (topic) => {
     if (topic) {
         query += ' WHERE slug = $1';
         return db.query(query, [topic]).then(({ rows }) => {
-            return rows
+            if (!rows.length) {
+                return Promise.reject({ status: 400, msg: 'Invalid topic!' });
+            }
+            return rows;
         })
     }
 
+
+
     return db.query(query).then(({ rows: topics }) => {
+
         return topics;
     });
 }

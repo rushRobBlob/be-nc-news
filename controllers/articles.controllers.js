@@ -32,34 +32,30 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
 exports.getAllArticles = (req, res, next) => {
     const { topic } = req.query
-
+    const promises = [];
     if (topic) {
-        Promise.all([retrieveAllArticles(topic), retrieveAllTopics(topic)])
-            .then(([articles, topic]) => {
-
-                if (!topic.length && !articles.length) {
-                    res.status(400).send({ msg: 'Invalid topic!' })
-                } else if (!articles.length && topic.length) {
-                    res.status(404).send({ msg: 'No articles found with that topic' })
-                } else {
-                    res.status(200).send({ articles });
-
-                }
-            })
-            .catch((err) => {
-
-                next(err);
-            });
+        promises.push(retrieveAllArticles(topic));
+        promises.push(retrieveAllTopics(topic));
     } else {
-        retrieveAllArticles().then((articles) => {
+        promises.push(retrieveAllArticles());
+    }
+    Promise.all(promises)
+        .then(([articles]) => {
             res.status(200).send({ articles });
         })
-            .catch((err) => {
-                next(err)
-            })
-    }
-
+        .catch((err) => {
+            next(err);
+        });
 }
+
+
+
+
+
+
+
+
+
 
 exports.postComment = (req, res, next) => {
     const comment = req.body;
