@@ -5,7 +5,7 @@ const { handleCustomErr, handle500Errors, handlePSQLErrors } = require('./contro
 const app = express();
 const endPoints = require('./endpoints.json')
 const { deleteCommentById } = require('./controllers/comments.controllers.js')
-const { getAllUsers } = require('./controllers/users.controllers.js')
+const { getAllUsers, getUsername } = require('./controllers/users.controllers.js')
 const cors = require('cors');
 
 app.use(cors());
@@ -32,7 +32,7 @@ app.get('/api/topics', getAllTopics);
 
 //USERS
 app.get('/api/users', getAllUsers);
-
+app.get('/api/users/:username', getUsername)
 
 //ERRORS
 app.use(handleCustomErr);

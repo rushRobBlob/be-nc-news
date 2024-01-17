@@ -5,3 +5,9 @@ exports.retrieveAllUsers = () => {
         return users;
     })
 }
+
+exports.fetchUsername = (username) => {
+    return db.query('SELECT * FROM users WHERE username = $1', [username]).then(({ rows: user }) => {
+        return user[0];
+    });
+}

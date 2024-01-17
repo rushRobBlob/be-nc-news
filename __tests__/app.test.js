@@ -337,3 +337,17 @@ describe('GET /api/articles/:article_id', () => {
         })
     })
 })
+
+describe('GET /api/users/:username', () => {
+    test('200: should respond with user object for valid user', () => {
+        const testUser = {
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String)
+        }
+        return request(app).get('/api/users/rogersop').then(({ body }) => {
+
+            expect(body.user).toMatchObject(testUser);
+        })
+    })
+})
